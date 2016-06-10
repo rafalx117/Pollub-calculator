@@ -10,6 +10,7 @@ namespace Pollub_calculator.Assets
     {
         public float Grade;
         public string Name;
+        public int Ects;
 
        public Subject()
         {

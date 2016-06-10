@@ -7,7 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel x:Name="panel" HorizontalAlignment="Left" Height="438" Margin="258,115,0,0" VerticalAlignment="Top" Width="526"/>
+    <Grid x:Name="mainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel x:Name="placeForFirstView" HorizontalAlignment="Left" Height="82" Margin="51,600,0,0" VerticalAlignment="Top" Width="1168"/>
+        <ScrollViewer HorizontalAlignment="Left" Height="100" Margin="810,330,0,0" VerticalAlignment="Top" Width="100"/>
+        <ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="487" Margin="51,57,0,0" VerticalAlignment="Top" Width="1168"/>
     </Grid>
 </Page>
