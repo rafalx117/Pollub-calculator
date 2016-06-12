@@ -8,8 +8,11 @@
     mc:Ignorable="d">
 
     <Grid x:Name="mainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel x:Name="placeForFirstView" HorizontalAlignment="Left" Height="82" Margin="51,600,0,0" VerticalAlignment="Top" Width="1168"/>
         <ScrollViewer HorizontalAlignment="Left" Height="100" Margin="810,330,0,0" VerticalAlignment="Top" Width="100"/>
         <ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="487" Margin="51,57,0,0" VerticalAlignment="Top" Width="1168"/>
+        <Button x:Name="addSubjectButton" Content="Dodaj przedmiot" HorizontalAlignment="Left" Margin="90,642,0,0" VerticalAlignment="Top" Click="createSet"/>
+        <Button x:Name="calculateAvgButton" Content="Oblicz średnią" HorizontalAlignment="Left" Margin="278,642,0,0" VerticalAlignment="Top" Click="setAverageLabel"/>
+        <TextBox x:Name="result" HorizontalAlignment="Left" Margin="524,642,0,0" TextWrapping="Wrap" Text="Tutaj pojawi się srednia" VerticalAlignment="Top" Width="364" IsEnabled="False"/>
+        <Button x:Name="debugWrite" Content="Debug" HorizontalAlignment="Left" Margin="1136,642,0,0" VerticalAlignment="Top" Click="debugWrite_Click"/>
     </Grid>
 </Page>

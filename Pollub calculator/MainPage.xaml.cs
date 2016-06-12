@@ -29,17 +29,28 @@ namespace Pollub_calculator
     public sealed partial class MainPage : Page
     {
         List<Subject> subjects = new List<Subject>();
-        List<TextBox> labels = new List<TextBox>();
-        List<TextBox> grades = new List<TextBox>();
-        List<TextBox> ects = new List<TextBox>();
+        List<TextBox> labelsList = new List<TextBox>();
+        List<TextBox> gradesList = new List<TextBox>();
+        List<TextBox> ectsList = new List<TextBox>();
+        bool firstRun = true;
+        bool firstCalculateButtonClick = true;
+
+
+        //------------------------------------------------------
+        //tych kontrolek bedziemy używac w metodzie createSet
+        Subject temp;
+        TextBox nameTextBox;
+        TextBox gradeTextBox;
+        TextBox ectsTextBox;
+        // -----------------------------------------------------
 
         StackPanel mainPanel = new StackPanel();
-        TextBox result; //tutaj bedziemy wyświetlać średnią
+      //  TextBox result; //tutaj bedziemy wyświetlać średnią
 
         public MainPage()
         {
             this.InitializeComponent();
-            CreateFirstView();
+          //  CreateFirstView();
              
             
 
@@ -47,29 +58,61 @@ namespace Pollub_calculator
 
         private void createSet(object sender, RoutedEventArgs e)
         {
-            Subject temp = new Subject();
+            temp = new Subject();
+
+            if (!firstRun)
+            {
+                temp.Name = nameTextBox.Text;
+
+                try
+                {
+                    temp.Grade = float.Parse(gradeTextBox.Text);
+                }
+                catch (FormatException)
+                {
+
+                   
+                }
+                try
+                {
+                    temp.Ects = int.Parse(ectsTextBox.Text);
+                }
+                catch (Exception)
+                {
+
+                    
+                }
+                
+                subjects.Add(temp);
+                setAverageLabel();
+               
+            }
+            else
+                firstRun = false;
+
+            
+            nameTextBox = new TextBox(); 
+            gradeTextBox = new TextBox();
+            ectsTextBox = new TextBox();
+ 
+            nameTextBox.KeyUp += new KeyEventHandler(updateSubjectsList);
             
 
-            StackPanel tempPanel = new StackPanel();
-            TextBox tempNameLabel = new TextBox(); 
-            TextBox tempGradeLabel = new TextBox();
-            TextBox tempEctsLanel = new TextBox();
+           TextBlock nameLabel = new TextBlock();
+            nameLabel.Text = "Przedmiot " + (subjects.Count + 1);
+            TextBlock gradeLabel = new TextBlock();
+            gradeLabel.Text = "Ocena";
+            TextBlock ectsLabel = new TextBlock();
+            ectsLabel.Text = "ECTS";
 
-            TextBlock name = new TextBlock();
-            name.Text = "Przedmiot";
-            TextBlock grade = new TextBlock();
-            grade.Text = "Ocena";
-            TextBlock ects = new TextBlock();
-            ects.Text = "ECTS";
+             
 
-            
-
-            mainPanel.Children.Add(name);
-            mainPanel.Children.Add(tempNameLabel);
-            mainPanel.Children.Add(grade);
-            mainPanel.Children.Add(tempGradeLabel);
-            mainPanel.Children.Add(ects);      
-            mainPanel.Children.Add(tempEctsLanel);
+            mainPanel.Children.Add(nameLabel);
+            mainPanel.Children.Add(nameTextBox);
+            mainPanel.Children.Add(gradeLabel);
+            mainPanel.Children.Add(gradeTextBox);
+            mainPanel.Children.Add(ectsLabel);      
+            mainPanel.Children.Add(ectsTextBox);
 
 
 
@@ -77,48 +120,28 @@ namespace Pollub_calculator
             mainGrid.Children.Remove(scrollViewer);
             mainGrid.Children.Add(scrollViewer);
 
-            
 
+            firstCalculateButtonClick = true;
 
         }
-
-        private void CreateFirstView()
+ 
+    
+            //btnClick.Click += new RoutedEventHandler(btnClick_Click);
+       private void updateSubjectsList(object sender, RoutedEventArgs e)
         {
-            Button addSubjectButton = new Button();
-            addSubjectButton.Content = "Dodaj przedmiot";
-            addSubjectButton.Click += new RoutedEventHandler(createSet);
-            placeForFirstView.Children.Add(addSubjectButton);
+            string temp = e.OriginalSource.GetType().Name;
 
-            TextBlock averageLabel = new TextBlock();
-            averageLabel.Text = "Średnia";
-            result = new TextBox();
-            placeForFirstView.Children.Add(averageLabel);
-            placeForFirstView.Children.Add(result);
-            
+            Debug.WriteLine(temp);
         }
 
-        private void CreateControls()
+        private float calculateAverage(List<Subject> list)
         {
-            
-
-            TextBlock txtName = new TextBlock();
-            txtName.Text = "@isenthil";
-            Button btnClick = new Button();
-            btnClick.Content = "Click";
-            btnClick.Click += new RoutedEventHandler(btnClick_Click);
+           /* if(firstCalculateButtonClick)
+            {
+                subjects.Add(temp); //jeśli po raz pierwszy klikamy przycisk, wówczas do listy przedmiotów dodajemy tymczasowy przedmiot z metody createSet (przedmiot którt jest ostatni i nie jest zapisywany po wciśnięciu przycisku Dodaj)
+                firstCalculateButtonClick = false;
+            }*/
            
-          //  panel.Children.Add(txtName);
-            //panel.Children.Add(btnClick);
-
-        }
-
-        void btnClick_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("ello");
-        }
-
-        private float average(List<Subject> list)
-        {
             float combinedSum = 0; //suma wszystkich przedmiotów: ects * ocena
             int ectsSum = 0;
 
@@ -139,6 +162,45 @@ namespace Pollub_calculator
             }
             
 
+        }
+
+
+        private void setAverageLabel( )
+        {
+            try
+            {
+                result.Text = calculateAverage(subjects).ToString();
+            }
+            catch (DivideByZeroException)
+            {
+
+                Debug.WriteLine("ZERO");
+            }
+
+        }
+
+        private void setAverageLabel(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                result.Text = calculateAverage(subjects).ToString();
+            }
+            catch (DivideByZeroException)
+            {
+
+                Debug.WriteLine("ZERO");
+            }
+            
+        }
+
+        private void debugWrite_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(subjects.Count);
+            foreach (Subject sub in subjects)
+            {
+               
+                Debug.WriteLine(sub.Name);
+            }
         }
     }
 }
